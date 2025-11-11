@@ -1,0 +1,48 @@
+seed: 42
+
+paths:
+  raw_data_dir: data/raw
+  artifacts_dir: artifacts
+  chunks_path: artifacts/chunks.parquet
+  embeddings_path: artifacts/embeddings.npy
+  index_path: artifacts/index.faiss
+  index_meta_path: artifacts/index_meta.jsonl
+  eval_path: artifacts/eval.json
+
+embedding:
+  model_name: sentence-transformers/all-MiniLM-L6-v2
+  device: cpu
+  batch_size: 32
+  normalize: true
+  use_dummy: false  # set true for tests/CI to avoid heavy downloads
+
+chunking:
+  chunk_size: 500
+  chunk_overlap: 50
+
+index:
+  type: IndexFlatIP
+  metric: ip  # inner product; with normalization yields cosine
+
+retrieval:
+  k_default: 5
+
+llm:
+  enabled: false
+  max_context_tokens: 2000
+  prompt_template: |
+    You are a helpful assistant. Answer the question using only the provided contexts.
+    If the answer is not contained in the contexts, say you don't know.
+    Question: {query}
+    Contexts:\n{contexts}
+  model: gpt-3.5-turbo
+  api_base: https://api.openai.com/v1
+
+eval:
+  k_default: 10
+
+server:
+  port: 8002
+
+mlflow:
+  tracking_uri: ./mlruns

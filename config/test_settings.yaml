@@ -1,0 +1,40 @@
+seed: 123
+
+paths:
+  raw_data_dir: data/raw
+  artifacts_dir: artifacts
+  chunks_path: artifacts/chunks.parquet
+  embeddings_path: artifacts/embeddings.npy
+  index_path: artifacts/index.faiss
+  index_meta_path: artifacts/index_meta.jsonl
+  eval_path: artifacts/eval.json
+
+embedding:
+  model_name: sentence-transformers/all-MiniLM-L6-v2
+  device: cpu
+  batch_size: 8
+  normalize: true
+  use_dummy: true
+
+chunking:
+  chunk_size: 100
+  chunk_overlap: 10
+
+index:
+  type: IndexFlatIP
+  metric: ip
+
+retrieval:
+  k_default: 5
+
+llm:
+  enabled: false
+
+eval:
+  k_default: 5
+
+server:
+  port: 8002
+
+mlflow:
+  tracking_uri: ./mlruns

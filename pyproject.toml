@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-toolkit"
+version = "0.1.0"
+description = "Open-source Retrieval Toolkit (RAG) with modular pipeline, evaluation, and demo"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Open-Source RAG Toolkit" }]
+license = { text = "MIT" }
+keywords = ["RAG", "retrieval", "FAISS", "sentence-transformers", "FastAPI", "MLflow", "DVC"]
+
+[project.urls]
+Homepage = "https://example.com"
+
+[project.scripts]
+rag = "rag_toolkit.cli:app"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "B", "PL", "UP"]
+ignore = ["E203", "E266", "E501", "PLR2004"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

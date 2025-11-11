@@ -1,0 +1,3 @@
+This toolkit demonstrates retrieval augmented generation (RAG).
+It includes loaders, chunker, embeddings via sentence-transformers, and a FAISS index.
+Artifacts are stored for reproducibility.

@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  rag-demo:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - MLFLOW_TRACKING_URI=./mlruns
+    volumes:
+      - .:/app

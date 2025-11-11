@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.vscode/
+.DS_Store
+
+# Artifacts and data
+artifacts/
+mlruns/
+.dvc/
+.dvcignore
+
+# Sphinx
+docs/_build/
+
+# Docker
+*.log

@@ -1,0 +1,24 @@
+stages:
+  chunk:
+    cmd: rag chunk --data data/raw
+    deps:
+      - config/settings.yaml
+      - data/raw
+    outs:
+      - artifacts/chunks.parquet
+  embed:
+    cmd: rag embed
+    deps:
+      - config/settings.yaml
+      - artifacts/chunks.parquet
+    outs:
+      - artifacts/embeddings.npy
+  index:
+    cmd: rag index_build
+    deps:
+      - config/settings.yaml
+      - artifacts/chunks.parquet
+      - artifacts/embeddings.npy
+    outs:
+      - artifacts/index.faiss
+      - artifacts/index_meta.jsonl
