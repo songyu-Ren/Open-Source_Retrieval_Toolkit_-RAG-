@@ -65,4 +65,5 @@ def log_mlflow(params: Dict, metrics: Dict) -> None:
         for k, v in params.items():
             mlflow.log_param(k, v)
         for k, v in metrics.items():
-            mlflow.log_metric(k, float(v))
+            name = k.replace("@", "_")
+            mlflow.log_metric(name, float(v))

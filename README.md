@@ -77,6 +77,28 @@ Production-minded, modular RAG toolkit with CLI and FastAPI demo, offline evalua
 - `GET /health` → index/model status and config summary
 - `GET /metrics` → Prometheus metrics
 
+## RAG Orchestration (LangChain/LangGraph)
+- Choose engine via `config/settings.yaml` under `orchestration.engine` or override via CLI flags.
+- Enable streaming via `orchestration.stream` in config or `--stream` flag in CLI.
+- Tracing can be enabled with `orchestration.tracing.langsmith_enabled=true` and `LANGSMITH_API_KEY` set; project can be configured via `orchestration.tracing.project` or `LANGCHAIN_PROJECT`.
+
+### CLI Examples
+```bash
+rag chain --q "what is in these docs?" --k 3 --engine langchain --no-stream
+rag chain --q "summarize the corpus" --engine langgraph --stream | head
+```
+
+### API Examples
+```bash
+curl -s -X POST localhost:8002/chain_query \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"test","k":3,"engine":"langchain","stream":false}'
+
+curl -s -X POST localhost:8002/chain_stream \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"stream me","engine":"langgraph","stream":true}' | head
+```
+
 ## LLM Integration
 - If `OPENAI_API_KEY` is set, uses an OpenAI-compatible HTTP endpoint.
 - Default fallback `NoLLM` returns concatenated contexts.

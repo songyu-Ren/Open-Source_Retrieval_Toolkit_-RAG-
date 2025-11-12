@@ -26,6 +26,7 @@ index:
 
 retrieval:
   k_default: 5
+  k: 5
 
 llm:
   enabled: false
@@ -37,6 +38,9 @@ llm:
     Contexts:\n{contexts}
   model: gpt-3.5-turbo
   api_base: https://api.openai.com/v1
+  provider: null
+  temperature: 0.0
+  max_tokens: 512
 
 eval:
   k_default: 10
@@ -46,3 +50,15 @@ server:
 
 mlflow:
   tracking_uri: ./mlruns
+
+orchestration:
+  engine: langchain
+  stream: false
+  rerank: false
+  tracing:
+    langsmith_enabled: false
+    project: rag-toolkit
+
+prompt:
+  system: "You are a factual assistant. Cite snippets."
+  template_path: "prompts/qa.j2"

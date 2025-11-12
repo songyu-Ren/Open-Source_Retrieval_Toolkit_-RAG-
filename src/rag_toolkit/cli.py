@@ -8,6 +8,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 import typer
+import uvicorn
 
 from .config import load_settings
 from .embedder import Embedder
@@ -17,6 +18,8 @@ from .chunker import chunk_documents, persist_chunks
 from .retrieval import Retriever
 from .eval import evaluate, save_eval, log_mlflow
 from .llm import get_llm_client
+from .chains import build_chain
+from .graphs import build_graph
 from .logging import get_logger
 
 app = typer.Typer(help="RAG Toolkit CLI")
@@ -125,3 +128,38 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+@app.command()
+def chain(q: str = typer.Option(..., "--q", help="Query text"), k: int = typer.Option(5, "--k"), engine: str = typer.Option("langchain", "--engine"), stream: bool = typer.Option(False, "--stream/--no-stream")) -> None:
+    s = load_settings()
+    if engine == "langgraph":
+        runner = build_graph()
+    else:
+        runner = build_chain()
+    if stream:
+        gen = runner.stream({"query": q, "k": k, "stream": True})
+        try:
+            for t in gen:
+                typer.echo(t, nl=False)
+        except StopIteration as e:
+            summary = e.value or {}
+            typer.echo("\n" + json.dumps(summary))
+    else:
+        result = runner.invoke({"query": q, "k": k, "stream": False})
+        typer.echo(json.dumps(result))
+
+
+@app.command()
+def serve(engine: str = typer.Option("langchain", "--engine"), stream: bool = typer.Option(False, "--stream/--no-stream")) -> None:
+    s = load_settings()
+    override = {
+        "orchestration": {
+            "engine": engine,
+            "stream": stream,
+            "rerank": False,
+            "tracing": {"langsmith_enabled": False, "project": "rag-toolkit"},
+        }
+    }
+    os.environ["RAG_SETTINGS"] = json.dumps(override)
+    uvicorn.run("rag_toolkit.api:app", host="0.0.0.0", port=int(s.server.port))

@@ -57,6 +57,9 @@ class LLMcfg:
     )
     model: str = "gpt-3.5-turbo"
     api_base: str = "https://api.openai.com/v1"
+    provider: str | None = None
+    temperature: float = 0.0
+    max_tokens: int = 512
 
 
 @dataclass
@@ -86,6 +89,8 @@ class Settings:
     eval: EvalCfg = field(default_factory=EvalCfg)
     server: ServerCfg = field(default_factory=ServerCfg)
     mlflow: MLflowCfg = field(default_factory=MLflowCfg)
+    orchestration: Dict[str, Any] = field(default_factory=dict)
+    prompt: Dict[str, Any] = field(default_factory=dict)
 
 
 def load_yaml(path: str) -> Dict[str, Any]:
@@ -129,4 +134,6 @@ def load_settings() -> Settings:
         eval=ev,
         server=srv,
         mlflow=mf,
+        orchestration=base.get("orchestration", {}),
+        prompt=base.get("prompt", {}),
     )

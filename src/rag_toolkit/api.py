@@ -13,10 +13,12 @@ from .retrieval import Retriever
 from .llm import get_llm_client
 from .metrics import observe_request, rag_query_score, metrics_response
 from .logging import get_logger
+from .api_chain import router as chain_router
 
 logger = get_logger(__name__)
 
 app = FastAPI(title="Open-Source RAG Toolkit", version="0.1.0")
+app.include_router(chain_router)
 
 _settings = load_settings()
 _embedder = Embedder(_settings.embedding, seed=_settings.seed)

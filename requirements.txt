@@ -17,3 +17,10 @@ pytest
 httpx
 black
 ruff
+langchain
+langgraph
+langchain-openai
+langchain-community
+tiktoken
+jinja2
+huggingface_hub>=0.34.0
